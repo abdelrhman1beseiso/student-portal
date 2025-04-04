@@ -18,7 +18,7 @@ return new class extends Migration
             $table->date('dob');
             $table->string('address');
             $table->timestamps();
-            $$table->string('student_id')->nullable(false)->change();
+            $table->string('student_id')->nullable(false)->change();
             $table->unique('student_id');
         });
     }
