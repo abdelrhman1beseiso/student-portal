@@ -9,12 +9,12 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
-        Schema::table('courses', function (Blueprint $table) {
-            //
-        });
-    }
+    public function up()
+{
+    Schema::table('courses', function (Blueprint $table) {
+        $table->bigIncrements('id')->change(); 
+    });
+}
 
     /**
      * Reverse the migrations.

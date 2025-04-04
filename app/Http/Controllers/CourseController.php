@@ -20,15 +20,25 @@ class CourseController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'credits' => 'required|integer|min:1'
-        ]);
-
-        Course::create($validated);
-
-        return redirect()->route('courses.index')->with('success', 'Course created successfully.');
+        try {
+            $validated = $request->validate([
+                'title' => 'required|string|max:255',
+                'description' => 'required|string',
+                'credits' => 'required|integer|min:1'
+            ]);
+    
+            $course = Course::create($validated);
+            
+            return redirect()->route('courses.index')
+                   ->with('success', 'Course created successfully');
+                   
+        } catch (\Illuminate\Database\QueryException $e) {
+            return back()->withInput()
+                   ->withErrors(['error' => 'Database error: '.$e->getMessage()]);
+        } catch (\Exception $e) {
+            return back()->withInput()
+                   ->withErrors(['error' => 'An error occurred: '.$e->getMessage()]);
+        }
     }
 
     public function show($id)

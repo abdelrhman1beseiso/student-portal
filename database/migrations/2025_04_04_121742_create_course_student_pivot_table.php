@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('course_id')->constrained()->onDelete('cascade');
             $table->foreignId('student_id')->constrained()->onDelete('cascade');
-            $table->date('enrolled_at');
-            $table->timestamp('enrolled_at')->useCurrent();
+            $table->timestamp('enrolled_at')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('course_student_pivot');
+        Schema::dropIfExists('course_student');
     }
 };

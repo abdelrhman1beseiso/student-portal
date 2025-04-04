@@ -26,7 +26,6 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
         
-        /* Enhanced Pagination Styles */
         .pagination {
             justify-content: center;
             margin-top: 2rem;
@@ -45,7 +44,6 @@
             font-size: 0.9rem;
         }
         
-        /* Improved Sidebar */
         .sidebar .nav-link {
             padding: 0.75rem 1rem;
             border-radius: 0.25rem;
@@ -99,7 +97,6 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Auto-dismiss alerts after 5 seconds
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(function() {
                 const alerts = document.querySelectorAll('.alert');

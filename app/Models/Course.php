@@ -14,14 +14,13 @@ class Course extends Model
         'description',
         'credits'
     ];
-    
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
-    }
 
+    protected $primaryKey = 'id';
+    
+   
+    
     public function students()
     {
         return $this->belongsToMany(Student::class)->withPivot('enrolled_at');
     }
-}
+}   

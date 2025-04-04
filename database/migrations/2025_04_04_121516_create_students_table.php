@@ -17,9 +17,9 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->date('dob');
             $table->string('address');
+            $table->string('student_id')->nullable()->after('id');
             $table->timestamps();
-            $$table->string('student_id')->nullable(false)->change();
-            $table->unique('student_id');
+            
         });
     }
 
