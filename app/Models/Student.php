@@ -17,8 +17,8 @@ class Student extends Model
     ];
     
     protected $casts = [
-        'dob' => 'date',  // This casts the dob field to a Carbon instance
-        'enrolled_at' => 'datetime' // If you use this field in the pivot table
+        'dob' => 'date',  
+        'enrolled_at' => 'datetime' 
     ];
 
     public function courses()

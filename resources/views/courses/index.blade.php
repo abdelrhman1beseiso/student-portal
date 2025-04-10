@@ -74,4 +74,4 @@
     });
 </script>
 @endsection
-git init
+
