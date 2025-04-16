@@ -69,10 +69,11 @@
             </p>
         </div>
         <div class="col-md-6 d-flex justify-content-end">
-            {{ $students->onEachSide(1)->links() }}
+            {{-- Use custom pagination view --}}
+            {{ $students->onEachSide(1)->links('pagination.custom') }}
         </div>
     </div>
-    @endsection
+@endsection
 </div>
 @endsection
 

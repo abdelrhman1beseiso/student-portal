@@ -17,7 +17,12 @@
                     <div class="d-flex justify-content-between align-items-start mb-3">
                         <h5 class="card-title mb-0">{{ $course->title }}</h5>
                         <span class="badge bg-dark rounded-pill">#{{ $course->id }}</span>
-                    </div>
+                      </div>
+                        <td>
+                         @if($course->image)
+                        <img src="{{ asset('storage/' . $course->image) }}" width="50">
+                    @endif
+                    </td>
                     <p class="card-text flex-grow-1">{{ $course->description }}</p>
                     <div class="mb-3">
                         <span class="fw-bold">Credits:</span> {{ $course->credits }}
@@ -57,10 +62,11 @@
             </p>
         </div>
         <div class="col-md-6 d-flex justify-content-end">
-            {{ $courses->onEachSide(1)->links() }}
+            {{-- Use the custom pagination view --}}
+            {{ $courses->onEachSide(1)->links('pagination.custom') }}
         </div>
     </div>
-    @endsection
+@endsection
 </div>
 @endsection
 

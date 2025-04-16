@@ -16,23 +16,28 @@
             </div>
         @endif
         
-        <form action="{{ route('courses.store') }}" method="POST">
+        <form action="{{ route('courses.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-    <div class="mb-3">
-        <label for="title" class="form-label">Course Title</label>
-        <input type="text" class="form-control" id="title" name="title" required>
-    </div> 
-    <div class="mb-3">
-        <label for="description" class="form-label">Description</label>
-        <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
-    </div>
-    <div class="mb-3">
-        <label for="credits" class="form-label">Credits</label>
-        <input type="number" class="form-control" id="credits" name="credits" min="1" required>
-    </div>
-    <button type="submit" class="btn btn-primary">Create Course</button>
-    <a href="{{ route('courses.index') }}" class="btn btn-secondary">Cancel</a>
-</form>
+            <div class="mb-3">
+                <label for="title" class="form-label">Course Title</label>
+                <input type="text" class="form-control" id="title" name="title" required>
+            </div> 
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="credits" class="form-label">Credits</label>
+                <input type="number" class="form-control" id="credits" name="credits" min="1" required>
+            </div>
+            <div class="mb-3">
+                <label for="image" class="form-label">Course Image</label>
+                <input type="file" class="form-control" id="image" name="image">
+                <small class="text-muted">Upload an image (JPEG, PNG, JPG, GIF) max 2MB</small>
+            </div>
+            <button type="submit" class="btn btn-primary">Create Course</button>
+            <a href="{{ route('courses.index') }}" class="btn btn-secondary">Cancel</a>
+        </form>
     </div>
 </div>
 @endsection

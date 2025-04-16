@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Course extends Model
 {
@@ -12,12 +13,17 @@ class Course extends Model
     protected $fillable = [
         'title',
         'description',
-        'credits'
+        'credits',
+        'image'
     ];
 
     protected $primaryKey = 'id';
     
-   
+    public function getImageUrlAttribute()
+    {
+        if (!$this->image) return null;
+        return Storage::url('courses/'.$this->image);
+    }
     
     public function students()
     {

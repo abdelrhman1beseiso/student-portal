@@ -2,53 +2,78 @@
 
 @section('content')
 <div class="card">
-    <div class="card-header">
+    <div class="card-header bg-primary text-white">
         <div class="d-flex justify-content-between align-items-center">
-            <h2>Course Details: {{ $course->title }}</h2>
+            <h2 class="mb-0">{{ $course->title }}</h2>
             <div>
-                <a href="{{ route('courses.edit', $course->id) }}" class="btn btn-sm btn-outline-primary">
-                    <i class="bi bi-pencil"></i> Edit
+                <a href="{{ route('courses.edit', $course->id) }}" class="btn btn-sm btn-light">
+                    <i class="fas fa-edit"></i> Edit
                 </a>
             </div>
         </div>
     </div>
+    
     <div class="card-body">
+        <!-- Image Display Section with Debugging -->
+        @if($course->image)
+            <div class="text-center mb-4 border rounded p-2 bg-light">
+                @if(file_exists(public_path('storage/' . $course->image)))
+                    <img src="{{ asset('storage/' . $course->image) }}" 
+                         alt="Course Image" 
+                         class="img-fluid rounded" 
+                         style="max-height: 300px;">
+                    <div class="mt-2 text-muted small">
+                        Image path: storage/{{ $course->image }}
+                    </div>
+                @else
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Image file not found at: storage/{{ $course->image }}
+                    </div>
+                @endif
+            </div>
+        @else
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> No image uploaded for this course
+            </div>
+        @endif
+
         <div class="row">
             <div class="col-md-8">
-                <h5 class="mb-3">Description</h5>
-                <p>{{ $course->description }}</p>
+                <h5 class="text-primary">Description</h5>
+                <p class="lead">{{ $course->description }}</p>
                 
-                <div class="row">
-                    <div class="col-md-4">
-                        <h5>Credits</h5>
-                        <p>{{ $course->credits }}</p>
+                <div class="row mt-4">
+                    <div class="col-md-4 mb-3">
+                        <div class="card border-primary">
+                            <div class="card-body text-center">
+                                <h6 class="card-subtitle mb-2 text-muted">Credits</h6>
+                                <p class="card-text display-6">{{ $course->credits }}</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-4">
-                        <h5>Created At</h5>
-                        <p>{{ $course->created_at->format('M d, Y') }}</p>
-                    </div>
-                    <div class="col-md-4">
-                        <h5>Last Updated</h5>
-                        <p>{{ $course->updated_at->format('M d, Y') }}</p>
+                    <div class="col-md-4 mb-3">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h6 class="card-subtitle mb-2 text-muted">Students</h6>
+                                <p class="card-text display-6">{{ $course->students->count() }}</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <hr>
-
-        <h4 class="mb-3">Enrolled Students ({{ $course->students->count() }})</h4>
-        
         @if($course->students->count() > 0)
+        <hr>
+        <h4 class="mt-4 text-primary">Enrolled Students</h4>
         <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table table-hover">
                 <thead>
                     <tr>
                         <th>Name</th>
                         <th>Email</th>
-                        <th>Enrollment Date</th>
-                        <small class="text-muted">Course ID: #{{ $course->id }}</small>
-
+                        <th>Enrolled Since</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -62,15 +87,12 @@
                 </tbody>
             </table>
         </div>
-        @else
-        <div class="alert alert-info">
-            No students are currently enrolled in this course.
-        </div>
         @endif
     </div>
-    <div class="card-footer">
+    
+    <div class="card-footer bg-light">
         <a href="{{ route('courses.index') }}" class="btn btn-outline-secondary">
-            <i class="bi bi-arrow-left"></i> Back to Courses
+            <i class="fas fa-arrow-left"></i> Back to Courses
         </a>
     </div>
 </div>
