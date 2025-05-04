@@ -61,8 +61,11 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-3 sidebar p-4">
-                <h2 class="text-center mb-4">Student Portal</h2>
-                <ul class="nav flex-column">
+            <h2 class="text-center mb-4">Student Portal</h2>
+<ul class="nav flex-column">
+    <li class="nav-item mb-3">
+        @include('components.home-button')
+    </li>
                     <li class="nav-item">
                         <a class="nav-link text-white {{ request()->routeIs('students.*') ? 'active' : '' }}" 
                            href="{{ route('students.index') }}">
@@ -75,6 +78,12 @@
                             <i class="bi bi-book-fill me-2"></i> Courses
                         </a>
                     </li>
+                    <li class="nav-item">
+        <a class="nav-link text-white {{ request()->routeIs('teachers.*') ? 'active' : '' }}" 
+           href="{{ route('teachers.index') }}">
+           <i class="bi bi-person-badge-fill me-2"></i> Teachers
+        </a>
+    </li>
                 </ul>
             </div>
             <div class="col-md-9 main-content">

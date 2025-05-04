@@ -32,7 +32,19 @@
                         <div class="list-group">
                             @foreach($student->courses as $course)
                             <div class="list-group-item d-flex justify-content-between align-items-center">
-                                {{ $course->title }}
+                                <div>
+                                    {{ $course->title }}
+                                    <div class="small text-muted">
+                                        @php
+                                            $teacher = $student->teachers()
+                                                ->wherePivot('course_id', $course->id)
+                                                ->first();
+                                        @endphp
+                                        @if($teacher)
+                                            <span>Teacher: {{ $teacher->name }}</span>
+                                        @endif
+                                    </div>
+                                </div>
                                 <span class="badge bg-secondary">
                                     {{ $course->pivot->enrolled_at->format('Y-m-d') }}
                                 </span>

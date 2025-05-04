@@ -27,5 +27,11 @@ class Student extends Model
                     ->withPivot('enrolled_at')
                     ->using(CourseStudent::class);
     }
+    public function teachers()
+{
+    return $this->belongsToMany(Teacher::class)
+                ->withPivot('course_id')
+                ->using(StudentTeacher::class);
+}
     
 }   

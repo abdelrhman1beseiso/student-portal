@@ -80,10 +80,8 @@ public function destroy($id)
 {
     $student = Student::findOrFail($id);
     
-    // Detach all courses first to maintain database integrity
     $student->courses()->detach();
     
-    // Then delete the student
     $student->delete();
 
     return redirect()->route('students.index')

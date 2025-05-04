@@ -26,23 +26,40 @@
             </div>
             <div class="mb-3">
                 <label for="address" class="form-label">Address</label>
-                <textarea class="form-control" id="address" name="address" rows="3" required>
-                    {{ old('address', $student->address) }}
-                </textarea>
+                <textarea class="form-control" id="address" name="address" rows="3" required>{{ old('address', $student->address) }}</textarea>
             </div>
             <div class="mb-3">
                 <label class="form-label">Courses</label>
                 <div class="row">
                     @foreach($courses as $course)
-                    <div class="col-md-4">
+                    <div class="col-md-4 mb-3">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" 
+                            <input class="form-check-input course-checkbox" type="checkbox" 
                                    name="courses[]" value="{{ $course->id }}" 
                                    id="course{{ $course->id }}"
                                    {{ $student->courses->contains($course->id) ? 'checked' : '' }}>
                             <label class="form-check-label" for="course{{ $course->id }}">
                                 {{ $course->title }} ({{ $course->credits }} credits)
                             </label>
+                        </div>
+                        
+                        <!-- Teacher Selection (only shown if course is checked) -->
+                        <div class="teacher-selection ms-4 mt-2" style="{{ $student->courses->contains($course->id) ? '' : 'display: none;' }}">
+                            @if($course->teachers->count() > 0)
+                                <select class="form-select form-select-sm" name="teachers[{{ $course->id }}]">
+                                    <option value="">Select Teacher</option>
+                                    @foreach($course->teachers as $teacher)
+                                        <option value="{{ $teacher->id }}"
+                                            {{ $student->teachers->contains($teacher->id) && $student->teachers->find($teacher->id)->pivot->course_id == $course->id ? 'selected' : '' }}>
+                                            {{ $teacher->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            @else
+                                <div class="alert alert-warning p-1 mb-0 small">
+                                    No teachers available for this course
+                                </div>
+                            @endif
                         </div>
                     </div>
                     @endforeach
@@ -53,4 +70,13 @@
         </form>
     </div>
 </div>
+
+<script>
+    document.querySelectorAll('.course-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const teacherSelection = this.closest('.col-md-4').querySelector('.teacher-selection');
+            teacherSelection.style.display = this.checked ? 'block' : 'none';
+        });
+    });
+</script>
 @endsection
