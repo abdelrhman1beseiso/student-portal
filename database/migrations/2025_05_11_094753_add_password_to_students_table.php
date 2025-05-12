@@ -9,20 +9,20 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
-{
-    Schema::table('teachers', function (Blueprint $table) {
-        $table->string('password')->nullable();
+    public function up(): void
+    {
+        Schema::table('students', function (Blueprint $table) {
+            $table->string('password')->nullable();
 
-    });
-}
+        });
+    }
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::table('teachers', function (Blueprint $table) {
+        Schema::table('students', function (Blueprint $table) {
             //
         });
     }

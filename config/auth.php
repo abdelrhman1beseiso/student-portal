@@ -36,15 +36,21 @@ return [
     */
 
     'guards' => [
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'users',
-        ],
-        'teacher' => [
+    'web' => [
+        'driver' => 'session',
+        'provider' => 'users',
+    ],
+
+    'student' => [
+        'driver' => 'session',
+        'provider' => 'students',
+    ],
+
+    'teacher' => [
         'driver' => 'session',
         'provider' => 'teachers',
     ],
-    ],
+],
 
     /*
     |--------------------------------------------------------------------------
@@ -64,16 +70,21 @@ return [
     */
 
     'providers' => [
-        'users' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\Student::class,
-        ],
+    'users' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\User::class,
+    ],
 
-        'teachers' => [
+    'students' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Student::class,
+    ],
+
+    'teachers' => [
         'driver' => 'eloquent',
         'model' => App\Models\Teacher::class,
     ],
-    ],
+],
 
 
     /*

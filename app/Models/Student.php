@@ -4,17 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
-class Student extends Model
+use Illuminate\Foundation\Auth\User as Authenticatable;
+class Student extends Authenticatable
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'email',
-        'dob',
-        'address'
-    ];
+    'name',
+    'email',
+    'dob',
+    'address',
+    'student_id',
+    'password',
+];
     
     protected $casts = [
         'dob' => 'date',  

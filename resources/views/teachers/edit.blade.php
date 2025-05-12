@@ -19,7 +19,10 @@
             <input type="email" class="form-control" id="email" name="email" 
                    value="{{ old('email', $teacher->email) }}" required>
         </div>
-        
+        <div class="form-group">
+    <label for="password">New Password (leave blank to keep current)</label>
+    <input type="password" name="password" class="form-control">
+</div>
         <div class="mb-3">
             <label for="specialization" class="form-label">Specialization</label>
             <input type="text" class="form-control" id="specialization" name="specialization" 
