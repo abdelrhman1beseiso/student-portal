@@ -6,6 +6,11 @@ use App\Models\Teacher;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Task;
+use App\Models\Solution;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+
 
 class TeacherController extends Controller
 {
@@ -87,4 +92,67 @@ class TeacherController extends Controller
 
         return redirect()->route('teachers.index')->with('success', 'Teacher deleted successfully!');
     }
+
+        public function tasks(Teacher $teacher)
+    {
+        $tasks = $teacher->tasks()->with('course')->latest()->get();
+        return view('teachers.tasks', compact('teacher', 'tasks'));
+    }
+
+    public function createTask(Teacher $teacher)
+{
+    logger('Teacher ID: '.$teacher->id);
+    $teacher->load('courses');
+    logger('Courses count: '.$teacher->courses->count());
+    logger('Courses: '.$teacher->courses->pluck('name'));
+    $coursesFromDB = \DB::table('course_teacher')
+        ->where('teacher_id', $teacher->id)
+        ->get();
+    logger('Pivot table entries: '.$coursesFromDB);
+
+    return view('teachers.create-task', compact('teacher'));
+}
+
+    public function storeTask(Request $request, Teacher $teacher)
+{
+    $validated = $request->validate([
+        'course_id' => 'required|exists:courses,id',
+        'title' => 'required|string|max:255',
+        'description' => 'required|string',
+        'deadline' => 'required|date|after:now'
+    ]);
+
+    // Verify the teacher actually teaches this course
+    if (!$teacher->courses->contains($validated['course_id'])) {
+        return back()->withErrors(['course_id' => 'You are not assigned to this course']);
+    }
+
+    $teacher->tasks()->create($validated);
+
+    return redirect()->route('teachers.tasks', $teacher)
+                    ->with('success', 'Task created successfully!');
+}
+
+
+    public function showTask(Teacher $teacher, Task $task)
+    {
+        $solutions = $task->solutions()->with('student')->latest()->get();
+        return view('teachers.task-show', compact('teacher', 'task', 'solutions'));
+    }
+
+    public function destroyTask(Teacher $teacher, Task $task)
+    {
+        $task->delete();
+        return redirect()->route('teachers.tasks', $teacher)
+                         ->with('success', 'Task deleted successfully!');
+    }
+      public function downloadTask(Task $task)
+{
+    if ($task->attachment_path && Storage::exists($task->attachment_path)) {
+        return Storage::download($task->attachment_path);
+    }
+
+    return back()->with('error', 'File not found.');
+}
+    
 }

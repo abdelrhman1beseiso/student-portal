@@ -3,20 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+
 class Student extends Authenticatable
 {
     use HasFactory;
 
     protected $fillable = [
-    'name',
-    'email',
-    'dob',
-    'address',
-    'student_id',
-    'password',
-];
+        'name',
+        'email',
+        'dob',
+        'address',
+        'student_id',
+        'password',
+    ];
     
     protected $casts = [
         'dob' => 'date',  
@@ -29,11 +29,16 @@ class Student extends Authenticatable
                     ->withPivot('enrolled_at')
                     ->using(CourseStudent::class);
     }
+
     public function teachers()
-{
-    return $this->belongsToMany(Teacher::class)
-                ->withPivot('course_id')
-                ->using(StudentTeacher::class);
+    {
+        return $this->belongsToMany(Teacher::class)
+                    ->withPivot('course_id')
+                    ->using(StudentTeacher::class);
+    }
+
+    public function solutions()
+    {
+        return $this->hasMany(Solution::class);
+    }
 }
-    
-}   

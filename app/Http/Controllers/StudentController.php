@@ -6,6 +6,12 @@ use App\Models\Student;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Task;
+use App\Models\Solution;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+
 
 class StudentController extends Controller
 {
@@ -95,4 +101,57 @@ class StudentController extends Controller
 
         return redirect()->route('students.index')->with('success', 'Student deleted successfully.');
     }
+
+       public function tasks(Student $student)
+    {
+        $tasks = Task::whereIn('course_id', $student->courses->pluck('id'))
+                    ->with('teacher', 'course')
+                    ->latest()
+                    ->get();
+        return view('students.tasks', compact('student', 'tasks'));
+    }
+
+    public function showTask(Student $student, Task $task)
+    {
+        $solutions = $student->solutions()->where('task_id', $task->id)->latest()->get();
+        return view('students.task-show', compact('student', 'task', 'solutions'));
+    }
+
+    public function storeSolution(Request $request, Student $student, Task $task)
+    {
+        $validated = $request->validate([
+            'content' => 'required|string',
+            'file' => 'nullable|file|max:2048'
+        ]);
+
+        $isLate = Carbon::now()->gt($task->deadline);
+
+        $solutionData = [
+            'content' => $validated['content'],
+            'is_late' => $isLate
+        ];
+
+        if ($request->hasFile('file')) {
+            $solutionData['file_path'] = $request->file('file')->store('solutions');
+        }
+
+        $task->solutions()->create(array_merge($solutionData, [
+            'student_id' => $student->id
+        ]));
+
+        return back()->with('success', 'Solution submitted successfully!');
+    }
+     public function downloadSolution(Solution $solution)
+{
+    if ($solution->student_id != auth()->id()) {
+        abort(403, 'Unauthorized action.');
+    }
+
+    if ($solution->file_path && Storage::exists($solution->file_path)) {
+        return Storage::download($solution->file_path);
+    }
+
+    return back()->with('error', 'File not found.');
 }
+}
+
