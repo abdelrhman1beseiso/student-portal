@@ -26,12 +26,20 @@
                         </a>
                     @endif
                 @else
-                    <form method="POST" action="{{ route('logout') }}" class="inline">
-                        @csrf
-                        <button type="submit" class="ml-4 text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium transition duration-200 ease-in-out focus:outline-none">
+                <form method="POST" action="{{ route('logout') }}" id="logout-form">
+                         @csrf
+                        <button type="submit" class="logout-btn">
                             <i class="fas fa-sign-out-alt mr-2"></i> Logout
                         </button>
                     </form>
+
+                    <script>
+                    document.getElementById('logout-form').addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        this.submit();
+                        window.location.href = '/';  
+                    });
+                    </script>
                 @endguest
             </div>
         </div>

@@ -15,9 +15,21 @@ class AuthenticatedSessionController extends Controller
 {
     /**
      * Display the login view.
+     * Redirect logged-in users to their dashboard.
      */
-    public function create(): View
+    public function create(): View|RedirectResponse
     {
+        // Check if a student is logged in
+        if (Auth::guard('student')->check()) {
+            return redirect('/student/dashboard');
+        }
+
+        // Check if a teacher is logged in
+        if (Auth::guard('teacher')->check()) {
+            return redirect('/teacher/dashboard');
+        }
+
+        // If no user is logged in, show the login page
         return view('auth.login');
     }
 
@@ -34,39 +46,42 @@ class AuthenticatedSessionController extends Controller
         $email = $request->email;
         $password = $request->password;
 
-        // Try student login
         if ($student = Student::where('email', $email)->first()) {
             if (Hash::check($password, $student->password)) {
                 Auth::guard('student')->login($student);
-                return redirect()->intended('/student/dashboard'); // Redirect to student dashboard
+                return redirect()->intended('/student/dashboard'); 
             }
         }
 
-        // Try teacher login
         if ($teacher = Teacher::where('email', $email)->first()) {
             if (Hash::check($password, $teacher->password)) {
                 Auth::guard('teacher')->login($teacher);
-                return redirect()->intended('/teacher/dashboard'); // Redirect to teacher dashboard
+                return redirect()->intended('/teacher/dashboard');
             }
         }
-
-        // If authentication fails
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ]);
     }
-
-    /**
-     * Destroy an authenticated session.
-     */
     public function destroy(Request $request): RedirectResponse
     {
-        Auth::guard('student')->logout();
-        Auth::guard('teacher')->logout();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return redirect('/');
+        // Force logout from all guards
+        foreach (config('auth.guards') as $guardName => $guardConfig) {
+            if (method_exists(Auth::guard($guardName), 'logout')) {
+                Auth::guard($guardName)->logout();
+            }
+        }
+    
+        // Completely destroy the session
+        session()->flush();
+        session()->regenerate(true);
+    
+        // Manually remove the session cookie
+        $cookie = \Cookie::forget(config('session.cookie'));
+    
+        // Redirect to login page with a success message
+        return redirect()->route('login')
+                       ->withCookie($cookie)
+                       ->with('status', 'You have been logged out successfully.');
     }
 }

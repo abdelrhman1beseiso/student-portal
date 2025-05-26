@@ -48,17 +48,24 @@ class TeacherController extends Controller
     }
 
     public function show(Teacher $teacher)
-    {
-        $teacher->load('courses', 'students');
-        return view('teachers.show', compact('teacher'));
+{
+    if (auth('teacher')->id() !== $teacher->id) {
+        abort(403, 'Unauthorized action.');
     }
+    
+    $teacher->load('courses', 'students');
+    return view('teachers.show', compact('teacher'));
+}
 
-    public function edit(Teacher $teacher)
-    {
-        $courses = Course::all();
-        return view('teachers.edit', compact('teacher', 'courses'));
+public function edit(Teacher $teacher)
+{
+    if (auth('teacher')->id() !== $teacher->id) {
+        abort(403, 'Unauthorized action.');
     }
-
+    
+    $courses = Course::all();
+    return view('teachers.edit', compact('teacher', 'courses'));
+}
     public function update(Request $request, Teacher $teacher)
     {
         $validated = $request->validate([
@@ -66,12 +73,18 @@ class TeacherController extends Controller
             'email' => 'required|email|unique:teachers,email,' . $teacher->id,
             'specialization' => 'required|string',
             'bio' => 'nullable|string',
-            'password' => 'nullable|string|min:6',
+            'old_password' => 'nullable|required_with:new_password',
+            'new_password' => 'nullable|min:6|confirmed',
+            'new_password_confirmation' => 'nullable|required_with:new_password',
         ]);
 
-        if ($request->filled('password')) {
-            $validated['password'] = Hash::make($validated['password']);
+        if ($request->filled('new_password')) {
+            if (!Hash::check($request->old_password, $teacher->password)) {
+                return back()->withErrors(['old_password' => 'The current password is incorrect.']);
+            }
+            $validated['password'] = Hash::make($request->new_password);
         }
+        unset($validated['old_password'], $validated['new_password'], $validated['new_password_confirmation']);
 
         $teacher->update($validated);
 
@@ -85,13 +98,19 @@ class TeacherController extends Controller
     }
 
     public function destroy(Teacher $teacher)
-    {
-        $teacher->courses()->detach();
-        $teacher->students()->detach();
-        $teacher->delete();
-
-        return redirect()->route('teachers.index')->with('success', 'Teacher deleted successfully!');
+{
+    if (auth('teacher')->id() !== $teacher->id) {
+        abort(403, 'Unauthorized action.');
     }
+    $teacher->courses()->detach();
+    $teacher->students()->detach();
+    $teacher->delete();
+
+    auth('teacher')->logout();
+    
+    return redirect()->route('welcome')
+           ->with('success', 'Your account has been deleted successfully!');
+}
 
         public function tasks(Teacher $teacher)
     {
@@ -100,18 +119,20 @@ class TeacherController extends Controller
     }
 
     public function createTask(Teacher $teacher)
-{
-    logger('Teacher ID: '.$teacher->id);
-    $teacher->load('courses');
-    logger('Courses count: '.$teacher->courses->count());
-    logger('Courses: '.$teacher->courses->pluck('name'));
-    $coursesFromDB = \DB::table('course_teacher')
-        ->where('teacher_id', $teacher->id)
-        ->get();
-    logger('Pivot table entries: '.$coursesFromDB);
-
-    return view('teachers.create-task', compact('teacher'));
-}
+    {
+        if (auth('teacher')->id() !== $teacher->id) {
+            abort(403, 'Unauthorized action.');
+        }
+    
+        $teacher->load(['courses' => function ($query) {
+            $query->select('courses.id', 'courses.name');
+        }]);
+    
+        return view('teachers.create-task', [
+            'teacher' => $teacher,
+            'courses' => $teacher->courses
+        ]);
+    }
 
     public function storeTask(Request $request, Teacher $teacher)
 {
@@ -122,7 +143,6 @@ class TeacherController extends Controller
         'deadline' => 'required|date|after:now'
     ]);
 
-    // Verify the teacher actually teaches this course
     if (!$teacher->courses->contains($validated['course_id'])) {
         return back()->withErrors(['course_id' => 'You are not assigned to this course']);
     }
@@ -146,13 +166,18 @@ class TeacherController extends Controller
         return redirect()->route('teachers.tasks', $teacher)
                          ->with('success', 'Task deleted successfully!');
     }
-      public function downloadTask(Task $task)
+    public function downloadSolution(Teacher $teacher, Solution $solution)
 {
-    if ($task->attachment_path && Storage::exists($task->attachment_path)) {
-        return Storage::download($task->attachment_path);
+    if (auth('teacher')->id() !== $teacher->id || 
+        $teacher->id !== $solution->task->teacher_id) {
+        abort(403, 'Unauthorized action.');
+    }
+
+    if ($solution->file_path && Storage::exists($solution->file_path)) {
+        return Storage::download($solution->file_path);
     }
 
     return back()->with('error', 'File not found.');
-}
+}   
     
 }

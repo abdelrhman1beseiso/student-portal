@@ -1,16 +1,15 @@
 <x-app-layout>
   <x-slot name="header">
-   <h2 class="animate__animated animate__fadeInDown text-3xl font-extrabold text-indigo-900 leading-tight tracking-tight">
+   <h2 class="text-3xl font-extrabold text-indigo-900 leading-tight tracking-tight">
     {{ __('Teacher Dashboard') }}
    </h2>
   </x-slot>
 
-  <div class="py-12 bg-indigo-50 animate__animated animate__fadeIn">
+  <div class="py-12 bg-indigo-50">
    <div class="max-w-5xl mx-auto px-6 lg:px-8">
-    <div
-     class="bg-white shadow-xl rounded-3xl border border-indigo-200 animate__animated animate__fadeInUp animate__delay-1s">
+    <div class="bg-white shadow-xl rounded-3xl border border-indigo-200">
      <div class="px-8 py-12">
-      <div class="mb-8 animate__animated animate__fadeInLeft animate__delay-2s">
+      <div class="mb-8">
        <h3 class="text-2xl font-semibold text-indigo-800">
         👋 Welcome back, <span class="text-indigo-600">{{ Auth::user()->name }}</span>!
        </h3>
@@ -19,7 +18,7 @@
        </p>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 text-gray-800 animate__animated animate__fadeIn animate__delay-3s">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 text-gray-800">
        <div
         class="bg-indigo-100 rounded-xl p-6 shadow-sm hover:shadow-md transition duration-300 ease-in-out">
         <div class="flex items-center space-x-4">
@@ -67,7 +66,7 @@
         </div>
        </div>
       </div>
-       <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4 animate__animated animate__fadeInUp animate__delay-4s">
+       <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4">
     <a href="{{ route('teachers.tasks', Auth::user()) }}"
        class="inline-flex items-center justify-center px-6 py-3 bg-black-600 text-move text-md font-semibold rounded-full shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-300 ease-in-out">
         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -91,24 +90,17 @@
         Edit Profile
     </a>
 </div>
-      <div class="mt-10 animate__animated animate__fadeInUp animate__delay-4s">
-       <button id="viewDetailsBtn"
-        class="inline-flex items-center px-6 py-3 bg-indigo-600 text-white text-md font-semibold rounded-full shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition duration-300 ease-in-out">
-        <i class="fas fa-eye -ml-1 mr-3 h-5 w-5"></i>
-        View Full Teacher Profile
-        <svg class="ml-3 w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
-         xmlns="http://www.w3.org/2000/svg">
-         <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
-        </svg>
-       </button>
+<div class="mt-10 animate__animated animate__fadeInUp animate__delay-4s">
+       
       </div>
+
      </div>
     </div>
    </div>
   </div>
 
   <div id="keyVerificationModal"
-   class="fixed z-10 inset-0 overflow-y-auto hidden animate__animated animate__fadeIn"
+   class="fixed z-10 inset-0 overflow-y-auto hidden"
    aria-labelledby="modal-title" role="dialog" aria-modal="true">
    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
 
@@ -154,17 +146,11 @@
    </div>
   </div>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
    integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
    crossorigin="anonymous" referrerpolicy="no-referrer" />
   <script>
-  const viewDetailsBtn = document.getElementById('viewDetailsBtn');
-  const keyVerificationModal = document.getElementById('keyVerificationModal');
-  const cancelKeyBtn = document.getElementById('cancelKeyBtn');
-  const verifyKeyBtn = document.getElementById('verifyKeyBtn');
-  const keyInput = document.getElementById('keyInput');
-  const keyError = document.getElementById('keyError');
+
 
   viewDetailsBtn.addEventListener('click', () => {
    keyVerificationModal.classList.remove('hidden');

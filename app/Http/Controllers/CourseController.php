@@ -56,10 +56,16 @@ class CourseController extends Controller
     }
 
     public function edit($id)
-    {
-        $course = Course::findOrFail($id);
-        return view('courses.edit', compact('course'));
+{
+    $course = Course::findOrFail($id);
+    
+    // Check if the authenticated teacher owns this course
+    if (!auth('teacher')->check() || !$course->teachers()->where('teacher_id', auth('teacher')->id())->exists()) {
+        abort(403, 'Unauthorized action.');
     }
+    
+    return view('courses.edit', compact('course'));
+}
 
     public function update(Request $request, $id)
 {
@@ -98,17 +104,22 @@ class CourseController extends Controller
 }
 
 
-    public function destroy($id)
-    {
-        $course = Course::findOrFail($id);
-        
-        // Delete associated image if exists
-        if ($course->image) {
-            Storage::disk('public')->delete($course->image);
-        }
-        
-        $course->delete();
+public function destroy($id)
+{
+    $course = Course::findOrFail($id);
+    
+    // Authorization check
+    if (!auth('teacher')->check() || !$course->teachers()->where('teacher_id', auth('teacher')->id())->exists()) {
+        abort(403, 'Unauthorized action.');
+    }
+    
+    // Delete associated image if exists
+    if ($course->image) {
+        Storage::disk('public')->delete($course->image);
+    }
+    
+    $course->delete();
 
-        return redirect()->route('courses.index')->with('success', 'Course deleted successfully.');
-    }   
+    return redirect()->route('courses.index')->with('success', 'Course deleted successfully.');
+} 
 }

@@ -50,11 +50,15 @@ class StudentController extends Controller
     }
 
     public function edit($id)
-    {
-        $student = Student::with('courses')->findOrFail($id);
-        $courses = Course::all();
-        return view('students.edit', compact('student', 'courses'));
+{
+    $student = Student::with('courses')->findOrFail($id);
+        if (auth('student')->id() !== $student->id) {
+        abort(403, 'Unauthorized action.');
     }
+    
+    $courses = Course::all();
+    return view('students.edit', compact('student', 'courses'));
+}
 
     public function update(Request $request, $id)
     {
@@ -65,13 +69,23 @@ class StudentController extends Controller
             'email' => 'required|email|unique:students,email,' . $student->id,
             'dob' => 'required|date',
             'address' => 'required|string',
-            'password' => 'nullable|string|min:6',
-            'courses' => 'array'
+            'courses' => 'array',
+            'old_password' => 'nullable|required_with:new_password',
+            'new_password' => 'nullable|min:6|confirmed',
+            'new_password_confirmation' => 'nullable|required_with:new_password',
         ]);
 
-        if ($request->filled('password')) {
-            $validated['password'] = Hash::make($validated['password']);
+        if ($request->filled('new_password')) {
+            // Verify old password
+            if (!Hash::check($request->old_password, $student->password)) {
+                return back()->withErrors(['old_password' => 'The current password is incorrect.']);
+            }
+            
+            // Update password
+            $validated['password'] = Hash::make($request->new_password);
         }
+        unset($validated['old_password'], $validated['new_password'], $validated['new_password_confirmation']);
+
 
         $student->update($validated);
 
@@ -88,9 +102,13 @@ class StudentController extends Controller
     }
 
     public function show(Student $student)
-    {
-        return view('students.show', compact('student'));
+{
+    if (auth('student')->id() !== $student->id) {
+        abort(403, 'Unauthorized action.');
     }
+    
+    return view('students.show', compact('student'));
+}
 
     public function destroy($id)
     {

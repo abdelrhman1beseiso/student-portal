@@ -113,11 +113,17 @@
                             </div>
                             <div class="ml-4 flex-shrink-0">
                                 @if($solution->file_path)
-                                <a href="{{ route('solutions.download', $solution->id) }}" 
-                                   class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                    <i class="bi bi-download mr-2"></i>
-                                    Download Attachment
+                                @foreach($solutions as $solution)
+                                <!-- Other solution details -->
+                                @if($solution->file_path)
+                                <a href="{{ route('teachers.solutions.download', [
+                                    'teacher' => $teacher,
+                                    'solution' => $solution
+                                ]) }}" class="btn btn-sm btn-primary">
+                                    Download Solution File
                                 </a>
+                                         @endif
+                                         @endforeach
                                 @endif
                             </div>
                         </div>

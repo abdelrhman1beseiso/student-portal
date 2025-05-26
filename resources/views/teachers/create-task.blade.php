@@ -34,7 +34,7 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('teachers.tasks.store', $teacher) }}">
+                <form method="POST" action="{{ route('teachers.tasks.store', $teacher) }}" enctype="multipart/form-data">
                     @csrf
                     
                     <!-- Course Selection -->
@@ -72,6 +72,14 @@
                         <label for="deadline" class="block text-sm font-medium text-gray-700 mb-1">Deadline</label>
                         <input type="datetime-local" id="deadline" name="deadline" value="{{ old('deadline') }}" required
                             class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    </div>
+
+                    <!-- File Upload -->
+                    <div class="mb-8">
+                        <label for="file" class="block text-sm font-medium text-gray-700 mb-1">Task File (Optional)</label>
+                        <input type="file" id="file" name="file"
+                            class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <p class="mt-1 text-sm text-gray-500">Upload any relevant files for this task (PDF, DOC, DOCX, etc.)</p>
                     </div>
 
                     <!-- Submit Button -->

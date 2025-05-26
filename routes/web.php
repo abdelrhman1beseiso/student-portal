@@ -27,12 +27,14 @@ Route::prefix('student')->middleware('auth:student')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('student.profile.update');
     
     Route::resource('students', StudentController::class)->only([
-        'index', 'show', 'edit', 'update'
+        'index', 'show', 'edit', 'update' , 'create' , 'destroy'
     ])->names([
         'index' => 'students.index',
         'show' => 'students.show',
         'edit' => 'students.edit',
-        'update' => 'students.update'
+        'update' => 'students.update',
+        'create' => 'students.create',
+        'destroy' => 'students.destroy'
     ]);
 
     // Student tasks routes
@@ -58,8 +60,11 @@ Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
     Route::get('teachers/{teacher}/tasks/create', [TeacherController::class, 'createTask'])->name('teachers.tasks.create');
     Route::post('teachers/{teacher}/tasks', [TeacherController::class, 'storeTask'])->name('teachers.tasks.store');
     Route::get('teachers/{teacher}/tasks/{task}', [TeacherController::class, 'showTask'])->name('teachers.tasks.show');
-    Route::get('/tasks/{task}/download', [TeacherController::class, 'downloadTask'])->name('teacher.tasks.download');
     Route::delete('/teachers/{teacher}/tasks/{task}', [TeacherController::class, 'destroyTask'])->name('teachers.tasks.destroy');
+    Route::get('/teacher/teachers/{teacher}/solutions/{solution}/download', 
+    [TeacherController::class, 'downloadSolution'])
+    ->name('teachers.solutions.download');
+
 
     // Teacher-course routes
     Route::prefix('teacher-course')->name('teacher-course.')->group(function () {

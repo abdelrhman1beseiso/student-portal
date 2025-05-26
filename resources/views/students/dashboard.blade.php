@@ -1,15 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight animate__animated animate__fadeIn">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Student Dashboard') }}
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-12"> 
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg animate__animated animate__fadeInUp animate__delay-1s">
+            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="p-6 text-gray-900 grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="flex items-center space-x-4 animate__animated animate__fadeInLeft animate__delay-2s">
+                    <div class="flex items-center space-x-4">
                         <div class="rounded-full bg-indigo-100 p-3">
                             <svg class="h-8 w-8 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -21,7 +21,7 @@
                         </div>
                     </div>
 
-                    <div class="flex items-center space-x-4 animate__animated animate__fadeInRight animate__delay-2s">
+                    <div class="flex items-center space-x-4">
                         <div class="rounded-full bg-blue-100 p-3">
                             <svg class="h-8 w-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8m-7 2v4m-7-4v4m-1 5h12a2 2 0 012 2v2a2 2 0 01-2 2H4a2 2 0 01-2-2v-2a2 2 0 012-2h1z" />
@@ -33,7 +33,7 @@
                         </div>
                     </div>
 
-                    <div class="flex items-center space-x-4 animate__animated animate__fadeInLeft animate__delay-3s">
+                    <div class="flex items-center space-x-4">
                         <div class="rounded-full bg-green-100 p-3">
                             <svg class="h-8 w-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2a9 9 0 00-9-9v1h-1a2 2 0 00-2 2v9a2 2 0 002 2h1a7 7 0 017-7zm7 9h1a2 2 0 002-2v-9a2 2 0 00-2-2h-1a7 7 0 01-7 7v-1a9 9 0 009 9z" />
@@ -44,7 +44,7 @@
                             <p class="text-sm text-gray-500">{{ Auth::user()->student_id }}</p>
                         </div>
                     </div>
-                     <div class="flex items-center space-x-4 animate__animated animate__fadeInRight animate__delay-3s">
+                     <div class="flex items-center space-x-4">
                         <div class="rounded-full bg-orange-100 p-3">
                             <svg class="h-8 w-8 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -52,14 +52,15 @@
                         </div>
                         <div>
                             <h3 class="text-lg font-semibold text-gray-700">Student Details</h3>
-                            <button onclick="showKeyModal('{{ route('students.index') }}')" class="mt-1 inline-flex items-center px-4 py-2 bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-gray-800 uppercase tracking-widest hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 transition ease-in-out duration-150">
-                                <i class="fas fa-info-circle mr-2"></i> View All Details
-                            </button>
+                            </a>
+                        <a href="{{ route('courses.index') }}" class="text-black-700 dark:text-black-300 hover:text-green-600 dark:hover:text-green-400 px-3 py-2 rounded-md text-sm font-medium transition duration-200 ease-in-out">
+                        <i class="fas fa-book mr-2"></i> View Courses
+                    </a>
                         </div>
                     </div>
                 </div>
 
-                <div class="md:col-span-2 mt-8 px-6 pb-6 animate__animated animate__fadeInUp animate__delay-4s">
+                <div class="md:col-span-2 mt-8 px-6 pb-6">
                     <div class="flex flex-col sm:flex-row justify-center gap-4">
                         <a href="{{ route('students.tasks', Auth::user()) }}"
                            class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-indigo-600 border border-transparent rounded-full font-semibold text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 shadow-md hover:shadow-lg">
@@ -67,7 +68,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
                             View & Submit Tasks
-                        </a>
+                        
 
                         <a href="{{ route('students.show', Auth::user()) }}"
                            class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-blue-600 border border-transparent rounded-full font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150 shadow-md hover:shadow-lg">
@@ -127,7 +128,6 @@
         </div>
     </div>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
     <script>
