@@ -27,14 +27,15 @@ Route::prefix('student')->middleware('auth:student')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('student.profile.update');
     
     Route::resource('students', StudentController::class)->only([
-        'index', 'show', 'edit', 'update' , 'create' , 'destroy'
+        'index', 'show', 'edit', 'update' , 'create' , 'destroy' ,'store'
     ])->names([
         'index' => 'students.index',
         'show' => 'students.show',
         'edit' => 'students.edit',
         'update' => 'students.update',
         'create' => 'students.create',
-        'destroy' => 'students.destroy'
+        'destroy' => 'students.destroy',
+        'store' => 'students.store'
     ]);
 
     // Student tasks routes

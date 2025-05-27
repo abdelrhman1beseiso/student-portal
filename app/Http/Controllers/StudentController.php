@@ -17,12 +17,18 @@ class StudentController extends Controller
 {
     public function index()
     {
+        if (auth('teacher')->check() || auth('student')->check()) {
+            abort(403, 'Administrator access only');
+        }
         $students = Student::with('courses')->paginate(6);
         return view('students.index', compact('students'));
     }
 
     public function create()
-    {
+    {   
+        if (!auth()->check() || !auth()->user()->is_admin) {
+            abort(403, 'Only administrators can create new teacher accounts.');
+        }
         $courses = Course::all();
         return view('students.create', compact('courses'));
     }

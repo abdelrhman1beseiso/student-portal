@@ -9,15 +9,23 @@ use Illuminate\Support\Facades\Storage;
 class CourseController extends Controller
 {
     public function index()
-    {
-        $courses = Course::with('students')->paginate(6);
-        return view('courses.index', compact('courses'));
+{
+    if (!auth('teacher')->check()) {
+        abort(403, 'Unauthorized access.  Only teachers can view the courses');
     }
 
-    public function create()
-    {
-        return view('courses.create');
+    $courses = Course::with('students')->paginate(6);
+    return view('courses.index', compact('courses'));
+}
+
+public function create()
+{
+    if (!auth('teacher')->check()) {
+        abort(403, 'Unauthorized action. Only teachers can create courses.');
     }
+
+    return view('courses.create');
+}
 
     public function store(Request $request)
     {
@@ -58,10 +66,8 @@ class CourseController extends Controller
     public function edit($id)
 {
     $course = Course::findOrFail($id);
-    
-    // Check if the authenticated teacher owns this course
-    if (!auth('teacher')->check() || !$course->teachers()->where('teacher_id', auth('teacher')->id())->exists()) {
-        abort(403, 'Unauthorized action.');
+        if (!auth('teacher')->check() || !$course->teachers()->where('teacher_id', auth('teacher')->id())->exists()) {
+        abort(403, 'Unauthorized action. you can edit your own courses only!');
     }
     
     return view('courses.edit', compact('course'));

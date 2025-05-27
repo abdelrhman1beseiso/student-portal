@@ -17,7 +17,7 @@
                             </div>
                             <div>
                                 <h2 class="text-2xl font-bold text-gray-900 leading-tight">{{ $task->title }}</h2>
-                                <p class="text-gray-600 text-sm">{{ $task->course->name }}</p>
+                                <p class="text-gray-600 text-sm">{{ $task->course->title }}</p>
                             </div>
                         </div>
 

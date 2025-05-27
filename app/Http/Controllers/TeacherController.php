@@ -15,16 +15,24 @@ use Illuminate\Support\Facades\Auth;
 class TeacherController extends Controller
 {
     public function index()
-    {
-        $teachers = Teacher::with('courses')->paginate(10);
-        return view('teachers.index', compact('teachers'));
+{
+    if (!auth()->check() || !auth()->user()->is_admin) {
+        abort(403, 'Administrator access only');
     }
 
-    public function create()
-    {
-        $courses = Course::all();
-        return view('teachers.create', compact('courses'));
+    $teachers = Teacher::with('courses')->paginate(10);
+    return view('teachers.index', compact('teachers'));
+}
+
+public function create()
+{
+    if (!auth()->check() || !auth()->user()->is_admin) {
+        abort(403, 'Only administrators can create new teacher accounts.');
     }
+
+    $courses = Course::all();
+    return view('teachers.create', compact('courses'));
+}
 
     public function store(Request $request)
     {
@@ -94,7 +102,7 @@ public function edit(Teacher $teacher)
             $teacher->courses()->detach();
         }
 
-        return redirect()->route('teachers.index')->with('success', 'Teacher updated successfully!');
+        return redirect()->route('teacher.dashboard')->with('success', 'Teacher updated successfully!');
     }
 
     public function destroy(Teacher $teacher)
@@ -125,7 +133,7 @@ public function edit(Teacher $teacher)
         }
     
         $teacher->load(['courses' => function ($query) {
-            $query->select('courses.id', 'courses.name');
+            $query->select('courses.id', 'courses.title');
         }]);
     
         return view('teachers.create-task', [

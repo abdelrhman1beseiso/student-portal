@@ -56,7 +56,7 @@
                             <div class="bg-gray-50 p-4 rounded-md mb-4 text-sm text-gray-700">
                                 <div class="flex items-center mb-2">
                                     <i class="bi bi-book text-indigo-500 mr-2"></i>
-                                    <span>{{ $task->course->name }}</span>
+                                    <span>{{ $task->course->title }}</span>
                                 </div>
                                 <div class="flex items-center">
                                     <i class="bi bi-person text-indigo-500 mr-2"></i>

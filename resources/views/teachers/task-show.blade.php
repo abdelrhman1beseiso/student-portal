@@ -7,7 +7,7 @@
         <div class="bg-white shadow rounded-lg overflow-hidden mb-8">
             <div class="px-6 py-5 bg-indigo-600 border-b border-indigo-500">
                 <h2 class="text-2xl font-bold text-white">{{ $task->title }}</h2>
-                <p class="text-indigo-100 mt-1">Course: {{ $task->course->name }} | Instructor: {{ $task->teacher->name }}</p>
+                <p class="text-indigo-100 mt-1">Course: {{ $task->course->title }} | Instructor: {{ $task->teacher->name }}</p>
             </div>
             <div class="px-6 py-4">
                 <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
