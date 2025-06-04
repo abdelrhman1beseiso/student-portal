@@ -64,24 +64,34 @@ class AuthenticatedSessionController extends Controller
         ]);
     }
     public function destroy(Request $request): RedirectResponse
-    {
-        // Force logout from all guards
-        foreach (config('auth.guards') as $guardName => $guardConfig) {
-            if (method_exists(Auth::guard($guardName), 'logout')) {
-                Auth::guard($guardName)->logout();
-            }
+{
+    // Debug 1: Check active guards
+    
+
+    // Force logout from all guards
+    foreach (config('auth.guards') as $guardName => $guardConfig) {
+        if (method_exists(Auth::guard($guardName), 'logout')) {
+            // Debug 2: Check each guard logout
+            
+            Auth::guard($guardName)->logout();
         }
-    
-        // Completely destroy the session
-        session()->flush();
-        session()->regenerate(true);
-    
-        // Manually remove the session cookie
-        $cookie = \Cookie::forget(config('session.cookie'));
-    
-        // Redirect to login page with a success message
-        return redirect()->route('login')
-                       ->withCookie($cookie)
-                       ->with('status', 'You have been logged out successfully.');
     }
+
+    
+
+    // Completely destroy the session
+    session()->flush();
+    session()->regenerate(true);
+
+
+
+    // Manually remove the session cookie
+    $cookie = \Cookie::forget(config('session.cookie'));
+
+    
+    // Redirect to login page with a success message
+    return redirect()->route('login')
+                   ->withCookie($cookie)
+                   ->with('status', 'You have been logged out successfully.');
+}
 }

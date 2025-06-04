@@ -16,21 +16,13 @@
             </div>
 
             <div class="flex items-center">
-            <form method="POST" action="{{ route('logout') }}" id="logout-form">
+            <form method="POST" action='/logout' id="logout-form">
                 @csrf
                 <button type="submit" class="logout-btn">
                     <i class="fas fa-sign-out-alt mr-2"></i> Logout
                 </button>
             </form>
 
-            <script>
-            document.getElementById('logout-form').addEventListener('submit', function(e) {
-                
-                e.preventDefault();
-                this.submit();
-                window.location.href = '/'; 
-            });
-            </script>
             </div>
         </div>
     </div>

@@ -32,14 +32,6 @@
                             <i class="fas fa-sign-out-alt mr-2"></i> Logout
                         </button>
                     </form>
-
-                    <script>
-                    document.getElementById('logout-form').addEventListener('submit', function(e) {
-                        e.preventDefault();
-                        this.submit();
-                        window.location.href = '/';  
-                    });
-                    </script>
                 @endguest
             </div>
         </div>
